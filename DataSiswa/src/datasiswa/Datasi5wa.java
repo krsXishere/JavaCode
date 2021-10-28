@@ -179,7 +179,7 @@ public class Datasi5wa extends javax.swing.JFrame {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         try {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO murid VALUES (?,?,?,?");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO murid VALUES (?,?,?,?)");
             ps.setString(1, tfNIS.getText());
             ps.setString(2, tfNama.getText());
             ps.setString(3, tfPhone.getText());
@@ -293,7 +293,7 @@ public class Datasi5wa extends javax.swing.JFrame {
     private void Connect() {
         conn= null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/sekolah", "root", "");
         } catch(Exception e){
             System.out.println("ERROR KONEKSI KE DATABASE:\n" + e + "\n\n");
