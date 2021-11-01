@@ -11,6 +11,7 @@ package datasiswa;
  */
 
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Datasi5wa extends javax.swing.JFrame {
@@ -43,43 +44,25 @@ public class Datasi5wa extends javax.swing.JFrame {
         tfNama = new javax.swing.JTextField();
         tfPhone = new javax.swing.JTextField();
         tfAlamat = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableData = new javax.swing.JTable();
         bHapus = new javax.swing.JButton();
         bEdit = new javax.swing.JButton();
         bTambah = new javax.swing.JButton();
         bHapus1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableData = new javax.swing.JTable();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Data Siswa CRUD");
 
-        jLabel1.setText("NIS");
+        jLabel1.setText("Id Siswa/i");
 
         jLabel2.setText("Nama");
 
         jLabel3.setText("No. Telpon");
 
         jLabel4.setText("Alamat");
-
-        tableData.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tableData.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableDataMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tableData);
 
         bHapus.setText("Hapus");
         bHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -115,31 +98,27 @@ public class Datasi5wa extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addGap(65, 65, 65)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(tfNama, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(tfPhone, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(tfAlamat)
+                        .addComponent(tfNIS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(tfNama, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(tfPhone, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(tfAlamat)
-                                .addComponent(tfNIS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(bTambah)
-                                .addGap(18, 18, 18)
-                                .addComponent(bEdit)
-                                .addGap(18, 18, 18)
-                                .addComponent(bHapus)
-                                .addGap(18, 18, 18)
-                                .addComponent(bHapus1)))
-                        .addGap(2, 2, 2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(bTambah)
+                        .addGap(18, 18, 18)
+                        .addComponent(bEdit)
+                        .addGap(18, 18, 18)
+                        .addComponent(bHapus)
+                        .addGap(18, 18, 18)
+                        .addComponent(bHapus1)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,10 +145,23 @@ public class Datasi5wa extends javax.swing.JFrame {
                     .addComponent(bTambah)
                     .addComponent(bEdit)
                     .addComponent(bHapus1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        tableData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Siswa/i", "Nama", "No. Hp", "Alamat"
+            }
+        ));
+        tableData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableDataMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableData);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -178,13 +170,19 @@ public class Datasi5wa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 28, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -199,6 +197,8 @@ public class Datasi5wa extends javax.swing.JFrame {
             ps.setString(3, tfPhone.getText());
             ps.setString(4, tfAlamat.getText());
             ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan");
             
             RefreshTable();
             tfNIS.setText("");
@@ -226,6 +226,8 @@ public class Datasi5wa extends javax.swing.JFrame {
             ps.setString(4, tfNIS.getText());
             ps.executeUpdate();
             
+            JOptionPane.showMessageDialog(this, "Data berhasil diedit");
+            
             RefreshTable();
             tfNIS.setText("");
             tfNama.setText("");
@@ -241,6 +243,8 @@ public class Datasi5wa extends javax.swing.JFrame {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM murid WHERE nis=?");
             ps.setString(1, tfNIS.getText());
             ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus");
             
             RefreshTable();
             tfNIS.setText("");
