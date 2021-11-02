@@ -322,8 +322,12 @@ public class Datasiswa extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/sekolah", "root", "");
+            
+            JOptionPane.showMessageDialog(this, "Koneksi berhasil");
+            
         } catch(Exception e){
             System.out.println("ERROR KONEKSI KE DATABASE:\n" + e + "\n\n");
+            JOptionPane.showMessageDialog(this, "Koneksi gagal");
         }
     }
 
