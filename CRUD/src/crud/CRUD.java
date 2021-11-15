@@ -24,6 +24,7 @@ public class CRUD extends javax.swing.JFrame {
      */
     public CRUD() {
         initComponents();
+        connect();
     }
 
     /**
@@ -51,6 +52,8 @@ public class CRUD extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CRUD");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Registrasi"));
 
         jLabel1.setText("Nama Mahasiswa");
 
@@ -91,6 +94,11 @@ public class CRUD extends javax.swing.JFrame {
         });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnKeluar.setText("Keluar");
         btnKeluar.addActionListener(new java.awt.event.ActionListener() {
@@ -112,12 +120,10 @@ public class CRUD extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addGap(48, 48, 48)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMatkul, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtNo, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                            .addComponent(txtMatkul)
+                            .addComponent(txtNama)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnTambah)
                         .addGap(22, 22, 22)
@@ -126,14 +132,15 @@ public class CRUD extends javax.swing.JFrame {
                         .addComponent(btnHapus)
                         .addGap(18, 18, 18)
                         .addComponent(btnKeluar)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -143,15 +150,21 @@ public class CRUD extends javax.swing.JFrame {
                             .addComponent(txtNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtMatkul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtMatkul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTambah)
-                    .addComponent(btnHapus)
-                    .addComponent(btnEdit)
-                    .addComponent(btnKeluar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnTambah)
+                                    .addComponent(btnHapus)
+                                    .addComponent(btnEdit)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnKeluar)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -178,6 +191,39 @@ public class CRUD extends javax.swing.JFrame {
 
     Connection conn;
     PreparedStatement tambah;
+    
+    private void connect(){
+        int c;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db_crud", "root", "");
+            tambah = conn.prepareStatement("select * from mahasiswa");
+            ResultSet rs = tambah.executeQuery();
+            ResultSetMetaData rss = rs.getMetaData();
+            c = rss.getColumnCount();
+            
+            DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
+            df.setRowCount(0);
+            
+            while(rs.next()){
+                Vector v2 = new Vector();
+                for(int a = 1; a <= c; a++){
+                    v2.add(rs.getString("id"));
+                    v2.add(rs.getString("nama"));
+                    v2.add(rs.getString("telpon"));
+                    v2.add(rs.getString("matkul"));
+                }
+                df.addRow(v2);
+            }
+            
+            JOptionPane.showMessageDialog(this, "Koneksi Berhasil");
+            
+        } catch(ClassNotFoundException ex){
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(SQLException ex){
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private void tableUpdate(){
         int c;
@@ -244,21 +290,32 @@ public class CRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        DefaultTableModel Df = (DefaultTableModel)jTable1.getModel();
+        int selectedIndex = jTable1.getSelectedRow();
+        
         try{
+            int id = Integer.parseInt(Df.getValueAt(selectedIndex, 0).toString());
+            String nama = txtNama.getText();
+            String telpon = txtNo.getText();
+            String matkul = txtMatkul.getText();
+            
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db_crud", "root", "");
-            PreparedStatement ps = conn.prepareStatement("update murid set nama=?, telpon=?, matkul=? where id=?");
-            ps.setString(1, txtNama.getText());
-            ps.setString(2, txtNo.getText());
-            ps.setString(3, txtMatkul.getText());;
-            ps.executeUpdate();
+            tambah = conn.prepareStatement("update mahasiswa set nama=?, telpon=?, matkul=? where id=?");
+            tambah.setString(1, txtNama.getText());
+            tambah.setString(2, txtNo.getText());
+            tambah.setString(3, txtMatkul.getText());
+            tambah.setInt(4, id);
+            tambah.executeUpdate();
             
             JOptionPane.showMessageDialog(this, "Data berhasil diedit");
-            
             tableUpdate();
+            
             txtNama.setText("");
             txtNo.setText("");
             txtMatkul.setText("");
+            
+            txtNama.requestFocus();
             
         } catch(ClassNotFoundException ex){
             Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
@@ -266,6 +323,38 @@ public class CRUD extends javax.swing.JFrame {
             Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        DefaultTableModel Df = (DefaultTableModel)jTable1.getModel();
+        int selectedIndex = jTable1.getSelectedRow();
+        
+        try{
+            int id = Integer.parseInt(Df.getValueAt(selectedIndex, 0).toString());
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Apakah anda akan menghapus baris ini?", "Warning", JOptionPane.YES_NO_OPTION);
+            
+            if(dialogResult == JOptionPane.YES_OPTION){
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db_crud", "root", "");
+            tambah = conn.prepareStatement("delete from mahasiswa where id=?");
+            tambah.setInt(1, id);
+            tambah.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus");
+            tableUpdate();
+            
+            txtNama.setText("");
+            txtNo.setText("");
+            txtMatkul.setText("");
+            
+            txtNama.requestFocus();
+            }
+            
+        } catch(ClassNotFoundException ex){
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(SQLException ex){
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
 
     /**
      * @param args the command line arguments
