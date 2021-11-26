@@ -10,9 +10,10 @@ package dashboard;
  * @author Kandang
  */
 
+//Krisna Purnama
+
 import java.sql.*;
 import connection.connection;
-import java.util.*;
 import java.util.logging.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
@@ -268,7 +269,6 @@ public class FormUser extends javax.swing.JFrame {
                 
                 txtJudul.setText("");
                 txtCatatan.setText("");
-                
             }
         }catch(Exception e){
             System.err.println(e);

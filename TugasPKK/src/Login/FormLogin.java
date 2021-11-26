@@ -10,6 +10,8 @@ package Login;
  * @author Kandang
  */
 
+//Krisna Purnama
+
 import java.sql.*;
 import javax.swing.JOptionPane;
 import connection.connection;
@@ -194,7 +196,7 @@ public class FormLogin extends javax.swing.JFrame {
            ps.setString(3, level);    
            ps.executeUpdate();
                       
-           JOptionPane.showMessageDialog(this, "Baris telah sukses ditambahkan");
+           JOptionPane.showMessageDialog(this, "Akun telah terdaftar");
            
            txtUser.setText("");
            txtPass.setText("");

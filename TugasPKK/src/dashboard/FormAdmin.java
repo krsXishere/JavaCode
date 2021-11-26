@@ -10,6 +10,8 @@ package dashboard;
  * @author Kandang
  */
 
+//Krisna Purnama
+
 import java.sql.*;
 import connection.connection;
 import java.util.*;
@@ -284,8 +286,7 @@ public class FormAdmin extends javax.swing.JFrame {
                 refreshTable();
                 
                 txtUser.setText("");
-                txtPass.setText("");
-                
+                txtPass.setText("");          
             }
         }catch(Exception e){
             System.err.println(e);
