@@ -72,6 +72,8 @@ public class Pinjam extends javax.swing.JFrame {
         tblData = new javax.swing.JTable();
         jdPeminjaman = new com.toedter.calendar.JDateChooser();
         jdPengembalian = new com.toedter.calendar.JDateChooser();
+        jLabel13 = new javax.swing.JLabel();
+        txtPeminjaman = new javax.swing.JTextField();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmiMainForm = new javax.swing.JMenuItem();
@@ -188,9 +190,12 @@ public class Pinjam extends javax.swing.JFrame {
         jLabel12.setForeground(new java.awt.Color(240, 240, 240));
         jLabel12.setText("Judul");
 
+        txtNama.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtNama.setEnabled(false);
+        txtNama.setSelectionColor(new java.awt.Color(0, 0, 0));
 
         txtJudul.setEnabled(false);
+        txtJudul.setSelectionColor(new java.awt.Color(0, 0, 0));
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -209,6 +214,9 @@ public class Pinjam extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tblData);
+
+        jLabel13.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel13.setText("ID Peminjaman");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -262,10 +270,18 @@ public class Pinjam extends javax.swing.JFrame {
                                     .addComponent(jLabel11))
                                 .addGap(36, 36, 36)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 409, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel13)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))))
                 .addGap(19, 19, 19))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(283, 283, 283)
@@ -282,7 +298,9 @@ public class Pinjam extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
@@ -428,18 +446,29 @@ public class Pinjam extends javax.swing.JFrame {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         String tanggalPinjam = String.valueOf(fm.format(jdPeminjaman.getDate()));
         String tanggalPengembalian = String.valueOf(fm.format(jdPengembalian.getDate()));
+        String id_peminjaman = txtPeminjaman.getText();
+        String id = txtId.getText();
+        String kode = txtKode.getText();
+        String denda = txtDenda.getText();
+        
         if((txtId.getText().equals("")) || (txtNama.getText().equals("")) || (txtKode.getText().equals("")) || (txtJudul.getText().equals("")) || (tanggalPinjam.equals("")) || (tanggalPengembalian.equals("")) || (txtDenda.getText().equals(""))){
             JOptionPane.showMessageDialog(btnSimpan, "Data tidak boleh kosong", "Informasi", WIDTH, null);
         }else{
-            String sql="Insert into pinjam(Id,Kode,Tgl_pinjam,Tgl_kembali,Denda) values ('"+this.txtId.getText()+"',"+ "'"+this.txtKode.getText()+"',"+ "'"+tanggalPinjam+"',"+"'"+tanggalPengembalian+"',"+"'"+this.txtDenda.getText()+"')";
             try{
-                ps = conn.prepareStatement(sql);
+                ps = conn.prepareStatement("Insert into peminjaman(id_peminjaman,Id,Kode,Tgl_pinjam,Tgl_kembali,Denda) values (?,?,?,?,?,?)");
+                ps.setString(1, id_peminjaman);
+                ps.setString(2, id);
+                ps.setString(3, kode);
+                ps.setString(4, tanggalPinjam);
+                ps.setString(5, tanggalPengembalian);
+                ps.setString(6, denda);
                 ps.executeUpdate();
                 ps.close();
                 
                 refreshTable();
-                JOptionPane.showMessageDialog(this, "Data berhasil disampan", "Infromasi", 1);
+                JOptionPane.showMessageDialog(this, "Data berhasil disampan", "Informasi", 1);
                 
+                txtPeminjaman.setText("");
                 txtId.setText("");
                 txtNama.setText("");
                 txtKode.setText("");
@@ -514,31 +543,41 @@ public class Pinjam extends javax.swing.JFrame {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String tanggalPinjam = String.valueOf(fm.format(jdPeminjaman.getDate()));
         String tanggalPengembalian = String.valueOf(fm.format(jdPengembalian.getDate()));
+        String id_peminjaman = txtPeminjaman.getText();
+        String id = txtId.getText();
+        String kode = txtKode.getText();
+        String denda = txtDenda.getText();
+        
         if((txtId.getText().equals(""))||(txtKode.getText().equals(""))||(txtJudul.getText().equals(""))||(tanggalPinjam.equals(""))||(tanggalPengembalian.equals(""))||(txtDenda.getText().equals(""))){
             JOptionPane.showMessageDialog(this, "Data Ada Yang Kosong", "INFORMASI", WIDTH, null);
         }else{
-        String sql = "Update pinjam SET Kode='"+this.txtKode.getText()+"'," + "Tgl_Pinjam='"+tanggalPinjam+"',"+"Tgl_Kembali='"+tanggalPengembalian+"',"+"Denda='"+this.txtDenda.getText()+"'"+"Where ID='"+this.txtId.getText()+"'";
             try {
-               ps = conn.prepareStatement(sql);
-               ps.executeUpdate();
-               ps.close();
-               
-               JOptionPane.showMessageDialog(this, "Edit Berhasil","Informasi",1);
-               
-               txtId.setText("");
-               txtNama.setText("");
-               txtKode.setText("");
-               txtJudul.setText("");
-               jdPeminjaman.setDateFormatString("");
-               jdPengembalian.setDateFormatString("");
-               txtDenda.setText("");
-               txtId.requestFocus();
-               txtId.setEnabled(true);
-               txtKode.setEnabled(true);
-               
-               refreshTable();
-            }
-             catch (SQLException ex) {
+                ps = conn.prepareStatement("Update peminjaman SET Id=?, Kode=?, Tgl_pinjam=?, Tgl_kembali=?, Denda=? where id_peminjaman=?");
+                ps.setString(1, id);
+                ps.setString(2, kode);
+                ps.setString(3, tanggalPinjam);
+                ps.setString(4, tanggalPengembalian);
+                ps.setString(5, denda);
+                ps.setString(6, id_peminjaman);
+                ps.executeUpdate();
+                ps.close();
+
+                JOptionPane.showMessageDialog(this, "Edit Berhasil","Informasi",1);
+
+                txtId.setText("");
+                txtNama.setText("");
+                txtKode.setText("");
+                txtJudul.setText("");
+                jdPeminjaman.setDateFormatString("");
+                jdPengembalian.setDateFormatString("");
+                txtDenda.setText("");
+                txtId.requestFocus();
+                txtId.setEnabled(true);
+                txtKode.setEnabled(true);
+
+                refreshTable();
+            }catch(SQLException ex) {
+                System.err.println(ex);
                 JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
             }
         }
@@ -549,12 +588,16 @@ public class Pinjam extends javax.swing.JFrame {
               JOptionPane.showMessageDialog(this, "Text Id Kosong","Informasi",1);
               txtId.requestFocus();
         }else{
-            String sqlkode="Delete from pinjam "+ "Where Id='"+this.txtId.getText()+"'";
+            int dialogResult =  JOptionPane.showConfirmDialog(this, "Apakah anda yakin akan menghapus akun ini?", "Warning", JOptionPane.YES_NO_OPTION);
+            
+            if(dialogResult == JOptionPane.YES_OPTION){
+                String sqlkode="Delete from peminjaman "+ "Where id_peminjaman='"+this.txtPeminjaman.getText()+"'";
                 try {
                     ps = conn.prepareStatement(sqlkode);
                     ps.executeUpdate();
                     ps.close();
 
+                    txtPeminjaman.setText("");
                     txtId.setText("");
                     txtNama.setText("");
                     txtKode.setText("");
@@ -570,6 +613,7 @@ public class Pinjam extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
                 }
+            }
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
@@ -581,23 +625,24 @@ public class Pinjam extends javax.swing.JFrame {
     }//GEN-LAST:event_tbnTampilActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        if(txtId.getText().equals("")){
-              JOptionPane.showMessageDialog(this, "Text ID Kosong","Informasi",1);
-              txtId.requestFocus();
+        if(txtPeminjaman.getText().equals("")){
+              JOptionPane.showMessageDialog(this, "Text Id Peminjaman Kosong","Informasi",1);
+              txtPeminjaman.requestFocus();
         }else{
         DefaultTableModel tabelpinjam = new DefaultTableModel();
-        tabelpinjam.addColumn("ID");
-        tabelpinjam.addColumn("Kode");
-        tabelpinjam.addColumn("Tgl_Pinjam");
-        tabelpinjam.addColumn("Tgl_Kembali");
+        tabelpinjam.addColumn("ID Peminjaman");
+        tabelpinjam.addColumn("ID Anggota");
+        tabelpinjam.addColumn("Kode Buku");
+        tabelpinjam.addColumn("Tgl Peminjaman");
+        tabelpinjam.addColumn("Tgl Pengembalian");
         tabelpinjam.addColumn("Denda");
         
             try {
-                String sql = "select * from pinjam where Id="+txtId.getText();
+                String sql = "select * from peminjaman where id_peminjaman="+txtPeminjaman.getText();
                 Statement stat = conn.createStatement();
                 rs = stat.executeQuery(sql);
                 while (rs.next()) {
-                    tabelpinjam.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
+                    tabelpinjam.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
                 }
                     tblData.setModel(tabelpinjam);
                     txtId.setText("");
@@ -621,11 +666,12 @@ public class Pinjam extends javax.swing.JFrame {
         DefaultTableModel Df = (DefaultTableModel)tblData.getModel();
         int selectedIndex = tblData.getSelectedRow();
         
-        txtId.setText(Df.getValueAt(selectedIndex, 0).toString());
-        txtKode.setText(Df.getValueAt(selectedIndex, 1).toString());
-        jdPeminjaman.setDateFormatString(Df.getValueAt(selectedIndex, 2).toString());
-        jdPengembalian.setDateFormatString(Df.getValueAt(selectedIndex, 3).toString());
-        txtDenda.setText(Df.getValueAt(selectedIndex, 4).toString());
+        txtPeminjaman.setText(Df.getValueAt(selectedIndex, 0).toString());
+        txtId.setText(Df.getValueAt(selectedIndex, 1).toString());
+        txtKode.setText(Df.getValueAt(selectedIndex, 2).toString());
+        txtDenda.setText(Df.getValueAt(selectedIndex, 7).toString());
+        btnEdit.setEnabled(true);
+        btnHapus.setEnabled(true);
     }//GEN-LAST:event_tblDataMouseClicked
 
     /**
@@ -672,6 +718,7 @@ public class Pinjam extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -698,22 +745,35 @@ public class Pinjam extends javax.swing.JFrame {
     private javax.swing.JTextField txtJudul;
     private javax.swing.JTextField txtKode;
     private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtPeminjaman;
     // End of variables declaration//GEN-END:variables
 
     public void refreshTable() {
         DefaultTableModel tabelpinjam = new DefaultTableModel();
-        tabelpinjam.addColumn("ID");
-        tabelpinjam.addColumn("Kode");
+        tabelpinjam.addColumn("ID Peminjaman");
+        tabelpinjam.addColumn("ID Anggota");
+        tabelpinjam.addColumn("ID Buku");
+        tabelpinjam.addColumn("Nama Anggota");
+        tabelpinjam.addColumn("Judul Buku");
         tabelpinjam.addColumn("Tgl Peminjaman");
         tabelpinjam.addColumn("Tgl Pengembalian");
         tabelpinjam.addColumn("Denda");
         
         try {
-            String sql = "select * from pinjam";
+            String sql = "select peminjaman.id_peminjaman, peminjaman.Id, peminjaman.Kode, anggota.Nama, koleksi.Judul, peminjaman.Tgl_pinjam, peminjaman.Tgl_kembali, peminjaman.Denda from ((peminjaman inner join koleksi on peminjaman.Kode=koleksi.Kode) inner join anggota on peminjaman.Id=anggota.Id)";
             Statement stat = conn.createStatement();
             ResultSet res=stat.executeQuery(sql);
+            
             while (res.next()) {
-                tabelpinjam.addRow(new Object[]{res.getString(1),res.getString(2),res.getString(3),res.getString(4),res.getString(5)});
+                tabelpinjam.addRow(new Object[]{res.getString(1),
+                res.getString(2),
+                res.getString(3),
+                res.getString(4),
+                res.getString(5),
+                res.getString(6),
+                res.getString(7),
+                res.getString(8)
+                });
             }
            tblData.setModel(tabelpinjam);
         } catch (Exception e) {
